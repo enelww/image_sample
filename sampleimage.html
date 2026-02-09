@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js with Image Tracking</title>
+    <!-- Import A-Frame and AR.js libraries -->
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+    <!-- Style for the loader -->
+    <style>
+        .arjs-loader {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .arjs-loader div {
+            text-align: center;
+            font-size: 1.25em;
+            color: white;
+        }
+    </style>
+</head>
+
+<body style="margin: 0px; overflow: hidden;">
+    <!-- Minimal loader shown until image descriptors are loaded -->
+    <div class="arjs-loader">
+        <div>Loading, please wait...</div>
+    </div>
+
+    <!-- A-Frame scene -->
+    <a-scene vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true;" embedded
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false; cameraParameters: assets/camera_para.dat;">
+        <!-- Image marker (NFT) setup -->
+        <a-nft type="nft" url="<path-to-your-image-descriptors>" smooth="true" smoothCount="30" smoothTolerance=".05"
+            smoothThreshold="10" markerhandler>
+            <!-- 3D model (replace with your actual model path) -->
+            <a-entity gltf-model="<path-to-your-model>" scale="5 5 5" position="0 0 0"></a-entity>
+        </a-nft>
+
+        <!-- Camera setup -->
+        <a-entity camera="fov: 80; near: 0.1; far: 1000"></a-entity>
+
+        <!-- Script to hide the loader once AR content is loaded -->
+        <script>
+            document.querySelector('a-scene').addEventListener('loaded', function () {
+                document.querySelector('.arjs-loader').style.display = 'none';
+            });
+
+            // Add touch event listener to redirect on screen touch
+            document.querySelector('a-scene').addEventListener('click', function () {
+                // Redirect to another URL when the screen is clicked/touched
+                window.location.href = "https://www.example.com"; // Replace with your desired URL
+            });
+        </script>
+    </a-scene>
+</body>
+
+</html>
